@@ -99,16 +99,16 @@ class ViewController: UIViewController {
         case 16: // =
             performCurrentOperation()
         case 12: // divide
-            previousNumber = Double(display.text!)!
+            previousNumber = numberOnScreen
             currentOperation = Operation.divide
         case 13: // multiply
-            previousNumber = Double(display.text!)!
+            previousNumber = numberOnScreen
             currentOperation = Operation.multiply
         case 14: // minus
-            previousNumber = Double(display.text!)!
+            previousNumber = numberOnScreen
             currentOperation = Operation.minus
         case 15: // plus
-            previousNumber = Double(display.text!)!
+            previousNumber = numberOnScreen
             currentOperation = Operation.plus
         default: break
         }
