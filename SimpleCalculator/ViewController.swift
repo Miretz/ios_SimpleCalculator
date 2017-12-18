@@ -14,7 +14,7 @@ class ViewController: UIViewController {
         didSet {
             let formatter = NumberFormatter()
             formatter.minimumIntegerDigits = 1
-            formatter.minimumFractionDigits = 0
+            formatter.minimumFractionDigits = isFractionInput ? numbersAfterDot : 0
             formatter.maximumFractionDigits = 10
             display.text = formatter.string(from: numberOnScreen as NSNumber) ?? "0"
         }
@@ -22,6 +22,10 @@ class ViewController: UIViewController {
     
     var previousNumber = 0.0
     var shouldClearBeforeInput = false
+    
+    //if fraction input is true, the user can type for example 0.00.., without the formater truncating the zero after the dot
+    var isFractionInput = false
+    var numbersAfterDot = 0
     
     var currentOperation = Operation.none
     enum Operation {
@@ -44,13 +48,22 @@ class ViewController: UIViewController {
     @IBAction func dotButtonPressed(_ sender: UIButton) {
         if let text = display.text, !text.contains(".") {
             display.text = text + "."
+            isFractionInput = true
         }
+    }
+    
+    private func resetFractionInput(){
+        isFractionInput = false
+        numbersAfterDot = 0
     }
     
     @IBAction func numberPressed(_ sender: UIButton) {
         if let text = display.text {
 
             let enteredNumber = String(sender.tag-1) // tag is number + 1
+            
+            if shouldClearBeforeInput { resetFractionInput() }
+            if isFractionInput { numbersAfterDot += 1 }
             
             //clear if there's only a 0, replicating how standard calculators work
             let displayText = (shouldClearBeforeInput || text=="0") ? enteredNumber : text + enteredNumber
@@ -81,12 +94,15 @@ class ViewController: UIViewController {
     }
     
     private func resetCalculator(){
+        resetFractionInput()
         previousNumber = 0.0
         currentOperation = Operation.none
         numberOnScreen = 0.0
     }
     
     @IBAction func operationPressed(_ sender: UIButton) {
+        
+        resetFractionInput()
         
         //execute the last operation before creating a new one
         if currentOperation != Operation.none {
