@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     var numberOnScreen = 0.0 {
         didSet {
             let formatter = NumberFormatter()
+            formatter.locale = Locale(identifier: "en_US") //override system locale
             formatter.minimumIntegerDigits = 1
             formatter.minimumFractionDigits = isFractionInput ? numbersAfterDot : 0
             formatter.maximumFractionDigits = 10
@@ -23,7 +24,8 @@ class ViewController: UIViewController {
     var previousNumber = 0.0
     var shouldClearBeforeInput = false
     
-    //if fraction input is true, the user can type for example 0.00.., without the formater truncating the zero after the dot
+    // if fraction input is true, the user can type for example 0.00..
+    // without the formater truncating the zero after the dot
     var isFractionInput = false
     var numbersAfterDot = 0
     
